@@ -1,0 +1,42 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= titulo
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #43cea2, #185a9d);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      h1 { font-size: 2rem; margin-bottom: 1rem; }
+      form { display: flex; flex-direction: column; gap: 10px; max-width: 300px; width: 100%; }
+      input, textarea {
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px;
+        background: #673ab7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover { background: #5e35b1; }
+
+  body
+    h1= mensaje
+
+    form(action="/datos" method="POST")
+      input(type="text" name="nombre" placeholder="Tu nombre" required)
+      textarea(name="mensaje" placeholder="Escribe un mensaje..." required)
+      button(type="submit") Enviar

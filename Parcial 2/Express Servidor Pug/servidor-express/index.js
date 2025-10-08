@@ -1,24 +1,23 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
+
+// Configurar Pug como motor de plantillas
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views')); // carpeta donde estarán las plantillas
+
+// Middleware para parsear JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
+// Rutas básicas
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  // Renderiza la plantilla "index.pug" y le pasa datos
+  res.render('index', { titulo: 'Página con Pug', mensaje: '¡Hola desde Pug!' });
 });
 
-app.post('/', (req, res) => {
-  res.json({ metodo: 'POST', recibido: req.body });
-});
-
-app.put('/', (req, res) => {
-  res.json({ metodo: 'PUT', recibido: req.body });
-});
-
-app.delete('/', (req, res) => {
-  res.send('DELETE recibido correctamente');
+app.post('/datos', (req, res) => {
+  const { nombre, mensaje } = req.body;
+  res.render('respuesta', { nombre, mensaje });
 });
 
 const PORT = 3000;
