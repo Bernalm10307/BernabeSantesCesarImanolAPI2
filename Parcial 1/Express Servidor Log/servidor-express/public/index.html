@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Servidor Express con Estilo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #00b4db, #0083b0);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    /* Contenedor principal */
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Botones de métodos */
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1 1 45%;
+      background: #fff;
+      color: #333;
+      border: none;
+      padding: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    button.get { background: #4caf50; color: white; }
+    button.post { background: #2196f3; color: white; }
+    button.put { background: #ff9800; color: white; }
+    button.delete { background: #f44336; color: white; }
+
+    /* Formulario */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, textarea {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    form button {
+      background: #673ab7;
+      color: #fff;
+    }
+
+    form button:hover {
+      background: #5e35b1;
+    }
+
+    /* Respuesta */
+    #response {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 10px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Servidor Express 💻</h1>
+
+  <div class="container">
+    <div class="buttons">
+      <button class="get" onclick="enviarPeticion('GET')">GET</button>
+      <button class="post" onclick="enviarPeticion('POST')">POST</button>
+      <button class="put" onclick="enviarPeticion('PUT')">PUT</button>
+      <button class="delete" onclick="enviarPeticion('DELETE')">DELETE</button>
+    </div>
+
+    <form id="formulario">
+      <input type="text" id="nombre" placeholder="Nombre" required>
+      <textarea id="mensaje" placeholder="Mensaje" required></textarea>
+      <button type="submit">Enviar con POST</button>
+    </form>
+
+    <div id="response">Aquí aparecerá la respuesta del servidor...</div>
+  </div>
+
+  <script>
+    // Función para GET, POST, PUT, DELETE con botones
+    async function enviarPeticion(metodo) {
+      let options = { method: metodo };
+
+      // Para POST y PUT, enviamos datos por defecto
+      if (metodo === 'POST' || metodo === 'PUT') {
+        options.headers = { 'Content-Type': 'application/json' };
+        options.body = JSON.stringify({
+          nombre: "Usuario Botón",
+          mensaje: `Este es un ${metodo} desde el botón`
+        });
+      }
+
+      const respuesta = await fetch('/', options);
+      const texto = await respuesta.text();
+      document.getElementById('response').textContent = texto;
+    }
+
+    // Enviar formulario con POST
+    document.getElementById('formulario').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const mensaje = document.getElementById('mensaje').value;
+
+      const respuesta = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, mensaje })
+      });
+
+      const texto = await respuesta.text();
+      document.getElementById('response').textContent = texto;
+    });
+  </script>
+</body>
+</html>
